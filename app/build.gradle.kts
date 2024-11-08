@@ -48,11 +48,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField(
-                "String",
-                "API_KEY",
-                "AIzaSyD9zZyyx4QvKVEcdYIWCvom4o28Lhf6-uo"
-            )
         }
     }
     compileOptions {

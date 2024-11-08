@@ -179,7 +179,6 @@ fun LoginScreen(
         Button(
             onClick = {
 
-
                 if (email.isNotBlank() || password.isNotBlank()) {
 
                     isLoading = true
@@ -222,7 +221,6 @@ fun LoginScreen(
                 )
             }
         }
-
         Spacer(Modifier.weight(1f))
     }
 }
