@@ -11,10 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -111,7 +115,7 @@ fun SignUpScreen(
                 unfocusedBorderColor = ButtonColorsPrimary,
                 unfocusedContainerColor = Color.LightGray,
                 focusedBorderColor = ButtonColorsPrimary,
-                focusedContainerColor = Color.White
+                focusedContainerColor = White
             ),
             shape = RoundedCornerShape(16.dp),
             trailingIcon = {
@@ -142,18 +146,21 @@ fun SignUpScreen(
                 unfocusedBorderColor = ButtonColorsPrimary,
                 unfocusedContainerColor = Color.LightGray,
                 focusedBorderColor = ButtonColorsPrimary,
-                focusedContainerColor = Color.White
+                focusedContainerColor = White
             ),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 22.dp),
             trailingIcon = {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_lock_24),
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp)
-                )
+                IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                    Icon(
+                        imageVector = if (isPasswordVisible) Icons.Filled.Visibility else
+                            Icons.Filled.VisibilityOff,
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,

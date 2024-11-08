@@ -11,10 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -34,6 +38,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -112,7 +118,7 @@ fun LoginScreen(
                 unfocusedBorderColor = ButtonColorsPrimary,
                 unfocusedContainerColor = Color.LightGray,
                 focusedBorderColor = ButtonColorsPrimary,
-                focusedContainerColor = Color.White
+                focusedContainerColor = White
             ),
             shape = RoundedCornerShape(16.dp),
             trailingIcon = {
@@ -139,22 +145,28 @@ fun LoginScreen(
             value = password,
             onValueChange = { password = it },
             label = { Text("Enter your password") },
+            visualTransformation = if (isPasswordVisible)
+                VisualTransformation.None else
+                PasswordVisualTransformation(),
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = ButtonColorsPrimary,
                 unfocusedContainerColor = Color.LightGray,
                 focusedBorderColor = ButtonColorsPrimary,
-                focusedContainerColor = Color.White
+                focusedContainerColor = White
             ),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 22.dp),
             trailingIcon = {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_lock_24),
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp)
-                )
+                IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                    Icon(
+                        imageVector = if (isPasswordVisible) Icons.Filled.Visibility else
+                            Icons.Filled.VisibilityOff,
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
@@ -209,128 +221,6 @@ fun LoginScreen(
                     fontWeight = FontWeight.Bold
                 )
             }
-        }
-
-        Spacer(Modifier.weight(1f))
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-private fun LoginScreenPreview() {
-
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush
-                    .verticalGradient(
-                        listOf(White, ColorUserMessage),
-                        startY = 0f,
-                        endY = 2500f
-                    )
-            )
-            .padding(horizontal = 24.dp, vertical = 12.dp),
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.baseline_arrow_back_24),
-            contentDescription = null,
-            modifier = Modifier.size(32.dp)
-        )
-
-        Spacer(Modifier.weight(0.2f))
-
-        Text(
-            text = "Email",
-            color = Color.Black,
-            fontWeight = FontWeight.Bold,
-            fontSize = 32.sp,
-            modifier = Modifier.padding(start = 22.dp)
-        )
-
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Enter your email") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 22.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = ButtonColorsPrimary,
-                unfocusedContainerColor = Color.LightGray,
-                focusedBorderColor = ButtonColorsPrimary,
-                focusedContainerColor = Color.White
-            ),
-            shape = RoundedCornerShape(16.dp),
-            trailingIcon = {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_email_24),
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp)
-                )
-            }
-        )
-
-        Spacer(Modifier.height(32.dp))
-
-        Text(
-            text = "Contraseña",
-            color = Color.Black,
-            fontWeight = FontWeight.Bold,
-            fontSize = 32.sp,
-            modifier = Modifier.padding(start = 22.dp)
-        )
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Enter your password") },
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = ButtonColorsPrimary,
-                unfocusedContainerColor = Color.LightGray,
-                focusedBorderColor = ButtonColorsPrimary,
-                focusedContainerColor = Color.White
-            ),
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 22.dp),
-            trailingIcon = {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_lock_24),
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp)
-                )
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
-            ),
-        )
-
-        Spacer(Modifier.height(32.dp))
-
-        Button(
-            onClick = {
-
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp)
-                .padding(horizontal = 42.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = ButtonColorsPrimary),
-            elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
-        ) {
-            Text(
-                text = "Iniciar sesión",
-                style = MaterialTheme.typography.headlineSmall,
-                color = White,
-                fontWeight = FontWeight.Bold
-            )
         }
 
         Spacer(Modifier.weight(1f))
