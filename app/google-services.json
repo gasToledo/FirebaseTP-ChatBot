@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "716827672366",
+    "project_id": "fir-tp-f7055",
+    "storage_bucket": "fir-tp-f7055.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:716827672366:android:9a70c4e3222dc07d5f04bf",
+        "android_client_info": {
+          "package_name": "com.tp.firebase.tp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJLfsCwKtt856hed_ToWFTTA5yNV0kp20"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
