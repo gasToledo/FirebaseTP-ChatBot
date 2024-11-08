@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tp.firebase.tp.ui.ChatScreenViewModel
 import com.tp.firebase.tp.ui.screen.ChatScreen
+import com.tp.firebase.tp.ui.screen.HomeScreen
 import com.tp.firebase.tp.ui.screen.InitialScreen
 import com.tp.firebase.tp.ui.screen.LoginScreen
 import com.tp.firebase.tp.ui.screen.SignUpScreen
@@ -47,6 +48,13 @@ fun NavigationWrapper(
                 auth = auth,
                 navigateToChat = { navController.navigate("chat") },
                 navigateBack = { navController.popBackStack() })
+        }
+        composable("home") {
+            HomeScreen(
+                username = "Gas",
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToChat = { navController.navigate("chat") }
+            )
         }
 
         composable("chat") {

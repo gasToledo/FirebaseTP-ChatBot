@@ -26,7 +26,13 @@ import com.tp.firebase.tp.R
 import com.tp.firebase.tp.ui.theme.ButtonColorsPrimary
 
 @Composable
-fun HomeScreen(modifier: Modifier, username: String, onNavigateBack: () -> Unit = {}) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    username: String,
+    onNavigateBack: () -> Unit = {},
+    onNavigateToChat: () -> Unit = {}
+) {
+
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -38,7 +44,7 @@ fun HomeScreen(modifier: Modifier, username: String, onNavigateBack: () -> Unit 
             painter = painterResource(R.drawable.baseline_arrow_back_24),
             contentDescription = null,
             modifier = Modifier
-                .padding(top = 16.dp,end = 320.dp)
+                .padding(top = 16.dp, end = 320.dp)
                 .size(32.dp)
                 .clickable { onNavigateBack() },
 
