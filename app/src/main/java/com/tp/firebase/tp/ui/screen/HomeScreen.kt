@@ -87,7 +87,7 @@ fun HomeScreen(
 
         Button(
             onClick = {
-
+                onNavigateToChat()
             },
             modifier = Modifier
                 .fillMaxWidth()

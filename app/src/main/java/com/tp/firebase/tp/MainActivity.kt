@@ -51,7 +51,8 @@ class MainActivity : ComponentActivity() {
                         navHostController,
                         auth,
                         db,
-                        chatScreenViewModel
+                        chatScreenViewModel,
+                        loginScreenViewModel
                     )
                 }
             }
