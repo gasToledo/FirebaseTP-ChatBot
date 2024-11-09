@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,12 +33,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.google.firebase.firestore.FirebaseFirestore
+import com.tp.firebase.tp.R
 import com.tp.firebase.tp.domain.MessageModel
-import com.tp.firebase.tp.ui.ChatScreenViewModel
+import com.tp.firebase.tp.ui.ChatViewModel
 import com.tp.firebase.tp.ui.theme.ButtonColorsPrimary
 import com.tp.firebase.tp.ui.theme.ColorModelMessage
 import com.tp.firebase.tp.ui.theme.ColorUserMessage
@@ -48,16 +49,15 @@ import com.tp.firebase.tp.ui.theme.TextColorPrimary
 @Composable
 fun ChatScreen(
     modifier: Modifier = Modifier,
-    viewModel: ChatScreenViewModel,
-    db: FirebaseFirestore,
-    backToInitial: () -> Unit = {},
+    viewModel: ChatViewModel,
+    onNavigationBack: () -> Unit = {},
 ) {
 
     Column(modifier = modifier) {
 
         val messageList by viewModel.messageList.collectAsState()
 
-        AppHeader(backToInitial)
+        AppHeader(onNavigationBack)
 
         MessageList(modifier = Modifier.weight(1f).padding(horizontal = 8.dp), messages = messageList)
 
@@ -185,7 +185,7 @@ private fun MessageInput(onMessageSend: (String) -> Unit) {
 }
 
 @Composable
-private fun AppHeader(backToInitial: () -> Unit) {
+private fun AppHeader(onNavigationBack: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -202,9 +202,9 @@ private fun AppHeader(backToInitial: () -> Unit) {
                 modifier = Modifier
                     .size(32.dp)
                     .clickable {
-                        backToInitial()
+                        onNavigationBack()
                     },
-                imageVector = Icons.AutoMirrored.Filled.Logout,
+                imageVector = ImageVector.vectorResource(R.drawable.baseline_arrow_back_24),
                 contentDescription = "Cerrar sesión",
                 tint = Color.White,
             )

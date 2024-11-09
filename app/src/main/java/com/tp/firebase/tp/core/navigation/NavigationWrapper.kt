@@ -7,8 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.tp.firebase.tp.ui.ChatScreenViewModel
+import com.tp.firebase.tp.ui.ChatViewModel
 import com.tp.firebase.tp.ui.HomeViewModel
 import com.tp.firebase.tp.ui.LoginViewModel
 import com.tp.firebase.tp.ui.SignUpViewModel
@@ -23,8 +22,7 @@ fun NavigationWrapper(
     modifier: Modifier,
     navController: NavHostController,
     auth: FirebaseAuth,
-    db: FirebaseFirestore,
-    chatScreenViewModel: ChatScreenViewModel,
+    chatViewModel: ChatViewModel,
     loginViewModel: LoginViewModel,
     signUpViewModel: SignUpViewModel,
     homeViewModel: HomeViewModel,
@@ -60,24 +58,23 @@ fun NavigationWrapper(
 
         composable("home") {
             HomeScreen(
-                username = loginViewModel.username.collectAsState().value.toString(),
+                username = homeViewModel.username.collectAsState().value.toString(),
                 onNavigateToChat = { navController.navigate("chat") },
                 signOut = {
                     navController.navigate("initial")
                     auth.signOut()
                 },
+                crashTest = { homeViewModel.runCrash() },
                 isChatActive = homeViewModel.isChatActive.collectAsState().value,
             )
         }
 
         composable("chat") {
             ChatScreen(
-                viewModel = chatScreenViewModel,
-                backToInitial = {
-                    navController.navigate("initial")
-                    auth.signOut()
+                viewModel = chatViewModel,
+                onNavigationBack = {
+                    navController.popBackStack()
                 },
-                db = db
             )
         }
 

@@ -1,5 +1,7 @@
 package com.tp.firebase.tp.core
 
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
@@ -47,4 +49,9 @@ class FirebaseModule {
         return FirebaseCrashlytics.getInstance()
     }
 
+    @Provides
+    @Singleton
+    fun provideFirebaseAnalytics(): FirebaseAnalytics {
+        return Firebase.analytics
+    }
 }

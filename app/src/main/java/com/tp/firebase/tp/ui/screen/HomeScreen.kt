@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.tp.firebase.tp.ui.theme.ButtonColorsPrimary
 
 @Composable
@@ -28,6 +27,7 @@ fun HomeScreen(
     username: String,
     onNavigateToChat: () -> Unit = {},
     signOut: () -> Unit = {},
+    crashTest: () -> Unit = {},
     isChatActive: Boolean = false
 ) {
     Column(
@@ -54,8 +54,7 @@ fun HomeScreen(
 
         Button(
             onClick = {
-                FirebaseCrashlytics.getInstance().log("Test Error Log")
-                throw RuntimeException("Test Crash")
+                crashTest()
             },
             modifier = Modifier
                 .fillMaxWidth()

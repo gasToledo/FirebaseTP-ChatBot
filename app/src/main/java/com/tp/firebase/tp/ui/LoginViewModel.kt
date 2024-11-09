@@ -15,11 +15,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    auth: FirebaseAuth,
+    private val auth: FirebaseAuth,
     private val db : FirebaseFirestore
 ) : ViewModel() {
 
-    val currentUser = auth.currentUser
+    /*val currentUser = auth.currentUser
     private val docRef: DocumentReference? by lazy {
         currentUser?.let { db.collection("usuario").document(it.uid) }
     }
@@ -42,7 +42,7 @@ class LoginViewModel @Inject constructor(
                 Log.e("LoginViewModel", "Error fetching username: ${e.message}")
             }
         }
-    }
+    }*/
 }
 
 
