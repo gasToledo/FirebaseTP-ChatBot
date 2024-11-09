@@ -15,8 +15,6 @@ plugins {
 
     id("com.google.firebase.crashlytics")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-
-
 }
 
 android {
@@ -65,7 +63,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -93,7 +90,6 @@ dependencies {
     // Navigation
     implementation(libs.androidx.navigation.compose)
 
-
     //Secrets Gradle
     implementation(libs.secrets.gradle.plugin)
 
@@ -117,10 +113,9 @@ dependencies {
     implementation(libs.coil.compose)
 
     // Retrofit
-//    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    //implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation(libs.converter.gson)
 
     // Material extend icons
     implementation(libs.androidx.material.icons.extended)
-
 }

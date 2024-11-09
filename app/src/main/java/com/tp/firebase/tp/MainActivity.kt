@@ -36,13 +36,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        auth = Firebase.auth
         firebaseAnalytics = Firebase.analytics
+        auth = Firebase.auth
         db = Firebase.firestore
+
         setContent {
             navHostController = rememberNavController()
-            chatScreenViewModel = hiltViewModel<ChatScreenViewModel>()
             loginScreenViewModel = hiltViewModel<LoginViewModel>()
+            chatScreenViewModel = hiltViewModel<ChatScreenViewModel>()
+
             FirebaseTPTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 

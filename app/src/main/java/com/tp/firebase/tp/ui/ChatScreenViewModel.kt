@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tp.firebase.tp.BuildConfig
 import com.tp.firebase.tp.domain.MessageModel
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatScreenViewModel @Inject constructor(
-    db: FirebaseFirestore
+    private val db: FirebaseFirestore
 ) : ViewModel() {
 
     private val _messageList = MutableStateFlow<List<MessageModel>>(emptyList())
@@ -28,6 +29,11 @@ class ChatScreenViewModel @Inject constructor(
         apiKey = BuildConfig.API_KEY,
     )
 
+    init {
+        loadMessagesFromFirestore()
+    }
+
+    // Enviar mensaje y guardar en Firestore
     fun sendMessage(question: String) {
         try {
             viewModelScope.launch {
@@ -39,26 +45,60 @@ class ChatScreenViewModel @Inject constructor(
                     }.toList(),
                 )
 
-                _messageList.update {
-                    it + MessageModel(question, "user")
-                }
+                // Agregar el mensaje del usuario
+                val userMessage = MessageModel(question, "user")
+                _messageList.update { it + userMessage }
+                saveMessageToFirestore(userMessage) // Guardar en Firestore
 
+
+                // Obtener la respuesta de la IA y guardar
                 val response = chat.sendMessage(question)
-                _messageList.update {
-                    it + MessageModel(response.text.toString().trimEnd(), "model")
-                }
+                val modelMessage = MessageModel(response.text.toString().trimEnd(), "model")
+                _messageList.update { it + modelMessage }
+                saveMessageToFirestore(modelMessage) // Guardar en Firestore
             }
-        } catch (
-            e: Exception
-        ) {
-            _messageList.value =
-                messageList.value + (MessageModel("Error al enviar el mensaje", "model"))
+        }
+        catch ( e: Exception ) {
+            _messageList.value = messageList.value + (MessageModel("Error al enviar el mensaje", "model"))
         }
     }
+
+
+    // Guardar mensaje en Firestore
+    private fun saveMessageToFirestore(message: MessageModel) {
+        val messageData = hashMapOf(
+            "message" to message.message,
+            "role" to message.rol,
+            "timestamp" to FieldValue.serverTimestamp()
+        )
+
+        db.collection("chats")
+            .add(messageData)
+            .addOnFailureListener {
+                _messageList.value = messageList.value + (MessageModel("Error al guardar el mensaje", "model"))
+            }
+    }
+
+
+    // Cargar mensajes guardados en Firestore
+    private fun loadMessagesFromFirestore() {
+        db.collection("chats")
+            .orderBy("timestamp") // Ordenar cronológicamente
+            .get()
+            .addOnSuccessListener { documents ->
+                val messages = documents.map { doc ->
+                    doc.toObject(MessageModel::class.java)
+                }
+                _messageList.value =  messages
+            }
+            .addOnFailureListener {
+                _messageList.value = messageList.value + (MessageModel("Error al cargar los mensajes", "model"))
+            }
+    }
+
 
     fun clearMessages() {
         _messageList.value = emptyList()
     }
 
 }
-

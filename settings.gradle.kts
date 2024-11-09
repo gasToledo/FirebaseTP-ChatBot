@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Firebase TP"
 include(":app")
- 

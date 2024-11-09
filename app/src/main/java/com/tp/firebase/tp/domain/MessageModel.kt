@@ -1,6 +1,7 @@
 package com.tp.firebase.tp.domain
 
 data class MessageModel(
-    val message : String,
-    val rol: String
+    var message: String? = null,
+    var rol: String? = null,
+    var timestamp: Long = System.currentTimeMillis()
 )

@@ -30,7 +30,6 @@ class LoginViewModel @Inject constructor(
 
 
     fun getUsername(){
-
         viewModelScope.launch {
 
             val documentSnaptshot = docRef?.get()?.await()
@@ -40,6 +39,3 @@ class LoginViewModel @Inject constructor(
         }
     }
 }
-
-
-
