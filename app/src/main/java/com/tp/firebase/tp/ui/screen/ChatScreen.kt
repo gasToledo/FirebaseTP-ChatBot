@@ -38,8 +38,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.tp.firebase.tp.domain.MessageModel
 import com.tp.firebase.tp.ui.ChatScreenViewModel
 import com.tp.firebase.tp.ui.theme.ButtonColorsPrimary
@@ -54,9 +52,6 @@ fun ChatScreen(
     db: FirebaseFirestore,
     backToInitial: () -> Unit = {},
 ) {
-
-
-
 
     Column(modifier = modifier) {
 

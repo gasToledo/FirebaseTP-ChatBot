@@ -19,7 +19,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.tp.firebase.tp.core.navigation.NavigationWrapper
 import com.tp.firebase.tp.ui.ChatScreenViewModel
+import com.tp.firebase.tp.ui.HomeViewModel
 import com.tp.firebase.tp.ui.LoginViewModel
+import com.tp.firebase.tp.ui.SignUpViewModel
 import com.tp.firebase.tp.ui.theme.FirebaseTPTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,16 +35,22 @@ class MainActivity : ComponentActivity() {
     private lateinit var navHostController: NavHostController
     private lateinit var loginScreenViewModel: LoginViewModel
     private lateinit var chatScreenViewModel: ChatScreenViewModel
+    private lateinit var signUpViewModel: SignUpViewModel
+    private lateinit var homeViewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
         firebaseAnalytics = Firebase.analytics
         db = Firebase.firestore
+
         setContent {
             navHostController = rememberNavController()
             chatScreenViewModel = hiltViewModel<ChatScreenViewModel>()
             loginScreenViewModel = hiltViewModel<LoginViewModel>()
+            signUpViewModel = hiltViewModel<SignUpViewModel>()
+            homeViewModel = hiltViewModel<HomeViewModel>()
+
             FirebaseTPTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
@@ -52,7 +60,9 @@ class MainActivity : ComponentActivity() {
                         auth,
                         db,
                         chatScreenViewModel,
-                        loginScreenViewModel
+                        loginScreenViewModel,
+                        signUpViewModel,
+                        homeViewModel
                     )
                 }
             }

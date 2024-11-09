@@ -52,7 +52,7 @@ android {
     }
     compileOptions {
         sourceCompatibility = VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = VERSION_11
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -103,6 +103,8 @@ dependencies {
     implementation(libs.firebase.crashlytics.ktx)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.config)
+
 
     // Room
     implementation(libs.room.runtime)

@@ -1,6 +1,5 @@
 package com.tp.firebase.tp.core.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -10,7 +9,9 @@ import androidx.navigation.compose.composable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tp.firebase.tp.ui.ChatScreenViewModel
+import com.tp.firebase.tp.ui.HomeViewModel
 import com.tp.firebase.tp.ui.LoginViewModel
+import com.tp.firebase.tp.ui.SignUpViewModel
 import com.tp.firebase.tp.ui.screen.ChatScreen
 import com.tp.firebase.tp.ui.screen.HomeScreen
 import com.tp.firebase.tp.ui.screen.InitialScreen
@@ -24,7 +25,9 @@ fun NavigationWrapper(
     auth: FirebaseAuth,
     db: FirebaseFirestore,
     chatScreenViewModel: ChatScreenViewModel,
-    loginViewModel: LoginViewModel
+    loginViewModel: LoginViewModel,
+    signUpViewModel: SignUpViewModel,
+    homeViewModel: HomeViewModel,
 ) {
 
     NavHost(
@@ -49,23 +52,21 @@ fun NavigationWrapper(
 
         composable("signUp") {
             SignUpScreen(
-                auth = auth,
-                navigateToChat = { navController.navigate("home") },
-                navigateBack = { navController.popBackStack() })
-
-
+                navigateToHome = { navController.navigate("home") },
+                navigateBack = { navController.popBackStack() },
+                viewModel = signUpViewModel
+            )
         }
 
         composable("home") {
             HomeScreen(
-                username = loginViewModel.username.collectAsState().value,
-                onNavigateBack = { navController.navigate("initial") },
-                onNavigateToChat = { navController.navigate("chat") }
-            )
-            Log.d("AuthID", auth.currentUser?.uid.toString())
-            Log.d(
-                "Database ID",
-                db.collection("usuario").document(auth.currentUser?.uid.toString()).id
+                username = loginViewModel.username.collectAsState().value.toString(),
+                onNavigateToChat = { navController.navigate("chat") },
+                signOut = {
+                    navController.navigate("initial")
+                    auth.signOut()
+                },
+                isChatActive = homeViewModel.isChatActive.collectAsState().value,
             )
         }
 

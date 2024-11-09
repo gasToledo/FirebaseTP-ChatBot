@@ -1,5 +1,6 @@
 package com.tp.firebase.tp.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,48 +9,32 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.tp.firebase.tp.R
 import com.tp.firebase.tp.ui.theme.ButtonColorsPrimary
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     username: String,
-    onNavigateBack: () -> Unit = {},
-    onNavigateToChat: () -> Unit = {}
+    onNavigateToChat: () -> Unit = {},
+    signOut: () -> Unit = {},
+    isChatActive: Boolean = false
 ) {
-
-
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
-        Icon(
-            painter = painterResource(R.drawable.baseline_arrow_back_24),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(top = 16.dp, end = 320.dp)
-                .size(32.dp)
-                .clickable { onNavigateBack() },
-
-        )
-
         Spacer(modifier = Modifier
             .weight(1f)
             .fillMaxWidth())
@@ -60,6 +45,8 @@ fun HomeScreen(
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.W500
         )
+
+        Log.d("HomeScreen", "HomeScreen: $username")
 
         Spacer(modifier = Modifier
             .weight(1f)
@@ -87,24 +74,35 @@ fun HomeScreen(
 
         Button(
             onClick = {
-                onNavigateToChat()
+                if (isChatActive) onNavigateToChat() else Log.d(
+                    "HomeScreen",
+                    "HomeScreen: Chat deshabilitado"
+                )
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
                 .padding(horizontal = 16.dp),
-            colors = ButtonDefaults.buttonColors(
+            colors = if (isChatActive) ButtonDefaults.buttonColors(
                 containerColor = ButtonColorsPrimary
-            )
+            ) else ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer)
         ) {
-            Text(text = "Ir al chat", style = MaterialTheme.typography.titleMedium)
+            if (isChatActive) {
+                Text(text = "Ir al chat", style = MaterialTheme.typography.titleMedium)
+            } else {
+                Text(text = "Deshabilitado", style = MaterialTheme.typography.titleMedium)
+            }
         }
 
         Spacer(modifier = Modifier
             .height(12.dp)
             .fillMaxWidth())
 
-        Text(text = "Cerrar sesion", style = MaterialTheme.typography.titleMedium)
+        Text(
+            modifier = Modifier.clickable { signOut() },
+            text = "Cerrar sesion",
+            style = MaterialTheme.typography.titleMedium
+        )
 
         Spacer(modifier = Modifier
             .weight(1f)

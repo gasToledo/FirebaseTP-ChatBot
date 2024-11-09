@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
@@ -38,21 +39,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.firebase.auth.FirebaseAuth
 import com.tp.firebase.tp.R
+import com.tp.firebase.tp.ui.SignUpViewModel
 import com.tp.firebase.tp.ui.theme.ButtonColorsPrimary
 import com.tp.firebase.tp.ui.theme.ColorUserMessage
 
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
-    auth: FirebaseAuth,
-    navigateToChat: () -> Unit = {},
+    viewModel: SignUpViewModel,
+    navigateToHome: () -> Unit = {},
     navigateBack: () -> Unit = {}
 ) {
 
+    var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var authError by remember { mutableStateOf(false) }
@@ -95,6 +99,39 @@ fun SignUpScreen(
                 Text(text = errorMessage)
             }
         }
+        Text(
+            text = "Username",
+            color = Color.Black,
+            fontWeight = FontWeight.Bold,
+            fontSize = 32.sp,
+            modifier = Modifier.padding(start = 22.dp)
+        )
+
+        OutlinedTextField(
+            value = username,
+            onValueChange = { username = it },
+            label = { Text("Enter your username") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 22.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedBorderColor = ButtonColorsPrimary,
+                unfocusedContainerColor = Color.LightGray,
+                focusedBorderColor = ButtonColorsPrimary,
+                focusedContainerColor = White
+            ),
+            shape = RoundedCornerShape(16.dp),
+            trailingIcon = {
+                Icon(
+                    Icons.Filled.Person,
+                    contentDescription = null,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+        )
+
+
+        Spacer(Modifier.height(32.dp))
 
         Text(
             text = "Email",
@@ -142,6 +179,9 @@ fun SignUpScreen(
             value = password,
             onValueChange = { password = it },
             label = { Text("Enter your password") },
+            visualTransformation = if (isPasswordVisible)
+                VisualTransformation.None else
+                    PasswordVisualTransformation(),
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = ButtonColorsPrimary,
                 unfocusedContainerColor = Color.LightGray,
@@ -172,24 +212,16 @@ fun SignUpScreen(
 
         Button(
             onClick = {
-                if (email.isNotBlank() || password.isNotBlank()) {
+                if (username.isNotBlank() || email.isNotBlank() || password.isNotBlank()) {
 
                     isLoading = true
-
-                    auth.createUserWithEmailAndPassword(
-                        email,
-                        password
-                    ).addOnCompleteListener {
-                        isLoading = false
-                        if (it.isSuccessful) {
-                            navigateToChat()
-                        } else {
-                            println("Error al registrarse ${it.exception}")
-                        }
-                    }
-                } else {
-                    errorMessage = "Por favor, ingrese un correo electrónico y una contraseña."
-                    authError = true
+                    viewModel.signUp(
+                        email = email,
+                        name = username,
+                        password = password
+                    )
+                    isLoading = false
+                    navigateToHome()
                 }
             },
             enabled = !isLoading,
