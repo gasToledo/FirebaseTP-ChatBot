@@ -125,7 +125,6 @@ private fun CustomButton(modifier: Modifier, image: Int, text: String) {
             .border(2.dp, ButtonColorsPrimary, CircleShape),
         contentAlignment = Alignment.CenterStart
     ) {
-
         Image(
             painter = painterResource(id = image),
             contentDescription = "Google Icon",

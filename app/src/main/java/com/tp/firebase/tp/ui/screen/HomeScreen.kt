@@ -1,5 +1,8 @@
 package com.tp.firebase.tp.ui.screen
 
+import android.R.attr.fontWeight
+import android.R.attr.onClick
+import android.R.attr.text
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
