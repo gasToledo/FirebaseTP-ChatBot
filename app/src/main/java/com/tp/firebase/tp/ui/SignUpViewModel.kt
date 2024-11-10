@@ -29,14 +29,13 @@ class SignUpViewModel @Inject constructor(
             )
                 .addOnSuccessListener {
                     it.user?.let { user ->
-                        db.collection("usuario").document(user.uid).set(
+                        db.collection("user").add(
                             User(
-                                username = name,
-                                email = email
+                                user.uid,
+                                name,
+                                email
                             )
                         )
-
-
                     }
                     Log.d("SignUpViewModel", "Usuario registrado correctamente")
                 }

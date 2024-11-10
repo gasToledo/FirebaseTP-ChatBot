@@ -45,7 +45,6 @@ fun NavigationWrapper(
                 navigateToChat = { navController.navigate("home") },
                 navigateBack = { navController.popBackStack() }
             )
-
         }
 
         composable("signUp") {
@@ -58,7 +57,7 @@ fun NavigationWrapper(
 
         composable("home") {
             HomeScreen(
-                username = homeViewModel.username.collectAsState().value.toString(),
+                viewModel = homeViewModel,
                 onNavigateToChat = { navController.navigate("chat") },
                 signOut = {
                     navController.navigate("initial")

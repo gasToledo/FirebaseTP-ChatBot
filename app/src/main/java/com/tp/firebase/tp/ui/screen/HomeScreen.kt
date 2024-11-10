@@ -1,8 +1,5 @@
 package com.tp.firebase.tp.ui.screen
 
-import android.R.attr.fontWeight
-import android.R.attr.onClick
-import android.R.attr.text
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,22 +14,27 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.tp.firebase.tp.ui.HomeViewModel
 import com.tp.firebase.tp.ui.theme.ButtonColorsPrimary
+
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    username: String,
+    viewModel: HomeViewModel,
     onNavigateToChat: () -> Unit = {},
     signOut: () -> Unit = {},
     crashTest: () -> Unit = {},
     isChatActive: Boolean = false
 ) {
+
+    viewModel.getUsername()
+
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -43,14 +45,11 @@ fun HomeScreen(
             .fillMaxWidth())
 
         Text(
-            text = "Bienvenido $username",
+            text = "Bienvenido ${viewModel.username.collectAsState().value}",
             modifier = Modifier,
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.W500
         )
-
-        Log.d("HomeScreen", "HomeScreen: $username")
-
         Spacer(modifier = Modifier
             .weight(1f)
             .fillMaxWidth())
@@ -113,9 +112,3 @@ fun HomeScreen(
     }
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen(modifier = Modifier, "Gas")
-}
