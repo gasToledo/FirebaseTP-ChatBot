@@ -48,14 +48,14 @@ class ChatScreenViewModel @Inject constructor(
                 // Agregar el mensaje del usuario
                 val userMessage = MessageModel(question, "user")
                 _messageList.update { it + userMessage }
-                saveMessageToFirestore(userMessage) // Guardar en Firestore
+                saveMessageToFirestore(userMessage)
 
 
                 // Obtener la respuesta de la IA y guardar
                 val response = chat.sendMessage(question)
                 val modelMessage = MessageModel(response.text.toString().trimEnd(), "model")
                 _messageList.update { it + modelMessage }
-                saveMessageToFirestore(modelMessage) // Guardar en Firestore
+                saveMessageToFirestore(modelMessage)
             }
         }
         catch ( e: Exception ) {
@@ -84,15 +84,18 @@ class ChatScreenViewModel @Inject constructor(
     private fun loadMessagesFromFirestore() {
         db.collection("chats")
             .orderBy("timestamp") // Ordenar cronológicamente
-            .get()
-            .addOnSuccessListener { documents ->
-                val messages = documents.map { doc ->
-                    doc.toObject(MessageModel::class.java)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    _messageList.value = messageList.value + (MessageModel("Error al cargar los mensajes", "model"))
+                    return@addSnapshotListener
                 }
-                _messageList.value =  messages
-            }
-            .addOnFailureListener {
-                _messageList.value = messageList.value + (MessageModel("Error al cargar los mensajes", "model"))
+
+                if (snapshot != null) {
+                    val messages = snapshot.documents.mapNotNull { doc ->
+                        doc.toObject(MessageModel::class.java)
+                    }
+                    _messageList.value = messages
+                }
             }
     }
 

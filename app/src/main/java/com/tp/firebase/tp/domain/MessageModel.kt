@@ -1,7 +1,8 @@
 package com.tp.firebase.tp.domain
+import com.google.firebase.Timestamp
 
 data class MessageModel(
     var message: String? = null,
     var rol: String? = null,
-    var timestamp: Long = System.currentTimeMillis()
+    var timestamp: Timestamp? = null
 )
