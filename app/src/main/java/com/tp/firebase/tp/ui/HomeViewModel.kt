@@ -41,7 +41,7 @@ class HomeViewModel @Inject constructor(
         this.putString("screen_name", "Home")
     }
     fun logEvent(){
-        analytics.logEvent("screen_name", parameters)
+        analytics.setDefaultEventParameters(parameters)
     }
 
 

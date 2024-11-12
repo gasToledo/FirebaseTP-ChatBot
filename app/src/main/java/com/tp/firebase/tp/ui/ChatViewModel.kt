@@ -43,11 +43,12 @@ class ChatViewModel @Inject constructor(
 
     val parameters = Bundle().apply {
         this.putString("screen_name", "Chat")
+        this.putString("chat", "ha comenzado un chat")
         this.putInt("personality_number", _chatPersonality.value)
     }
 
     fun logEvent() {
-        analytics.logEvent("screen_name", parameters)
+        analytics.setDefaultEventParameters(parameters)
     }
 
     init {
@@ -64,10 +65,6 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-
-
-
-
     fun sendMessage(question: String) {
         try {
             viewModelScope.launch {
@@ -79,10 +76,7 @@ class ChatViewModel @Inject constructor(
                     }.toList(),
                 )
 
-                analytics.logEvent("Chat iniciado") {
-                    param("mensaje", question)
-                }
-
+                logEvent()
                 _messageList.update {
                     it + MessageModel(question, "user")
                 }
