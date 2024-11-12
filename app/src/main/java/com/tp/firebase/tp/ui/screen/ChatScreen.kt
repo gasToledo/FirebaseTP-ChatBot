@@ -53,13 +53,17 @@ fun ChatScreen(
     onNavigationBack: () -> Unit = {},
 ) {
 
+    viewModel.logEvent()
+
     Column(modifier = modifier) {
 
         val messageList by viewModel.messageList.collectAsState()
 
         AppHeader(onNavigationBack)
 
-        MessageList(modifier = Modifier.weight(1f).padding(horizontal = 8.dp), messages = messageList)
+        MessageList(modifier = Modifier
+            .weight(1f)
+            .padding(horizontal = 8.dp), messages = messageList)
 
         Spacer(modifier = Modifier.height(8.dp))
 

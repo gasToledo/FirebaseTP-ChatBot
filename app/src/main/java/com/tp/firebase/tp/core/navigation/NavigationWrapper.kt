@@ -63,6 +63,7 @@ fun NavigationWrapper(
                     navController.navigate("initial")
                     auth.signOut()
                     homeViewModel.clearUsername()
+                    chatViewModel.clearMessages()
                 },
                 crashTest = { homeViewModel.runCrash() },
                 isChatActive = homeViewModel.isChatActive.collectAsState().value,

@@ -1,5 +1,6 @@
 package com.tp.firebase.tp.ui
 
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -40,6 +41,14 @@ class ChatViewModel @Inject constructor(
     private val _generativeModel = MutableStateFlow<GenerativeModel?>(null)
     val generativeModel: StateFlow<GenerativeModel?> = _generativeModel.asStateFlow()
 
+    val parameters = Bundle().apply {
+        this.putString("screen_name", "Chat")
+        this.putInt("personality_number", _chatPersonality.value)
+    }
+
+    fun logEvent() {
+        analytics.logEvent("screen_name", parameters)
+    }
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -54,6 +63,8 @@ class ChatViewModel @Inject constructor(
             )
         }
     }
+
+
 
 
 
@@ -118,6 +129,17 @@ class ChatViewModel @Inject constructor(
                 3 -> Constants.P3
                 else -> Constants.P1
             }
+    }
+
+    fun clearMessages() {
+        try {
+            viewModelScope.launch {
+                _messageList.value = emptyList()
+            }
+        } catch (e: Exception) {
+            crashlytics.recordException(e)
+            crashlytics.setCustomKey("Chat", "Error al limpiar los mensajes")
+        }
     }
 }
 

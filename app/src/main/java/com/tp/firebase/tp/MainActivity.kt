@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
             signUpViewModel = hiltViewModel<SignUpViewModel>()
             homeViewModel = hiltViewModel<HomeViewModel>()
 
-            FirebaseTPTheme {
+            FirebaseTPTheme(darkTheme = false, dynamicColor = false) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
                     NavigationWrapper(

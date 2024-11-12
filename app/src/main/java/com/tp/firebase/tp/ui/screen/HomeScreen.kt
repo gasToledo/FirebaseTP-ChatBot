@@ -35,6 +35,9 @@ fun HomeScreen(
 
     viewModel.getUsername()
 
+
+    viewModel.logEvent()
+
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,

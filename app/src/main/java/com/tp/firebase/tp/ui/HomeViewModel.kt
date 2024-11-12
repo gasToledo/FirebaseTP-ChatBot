@@ -1,8 +1,10 @@
 package com.tp.firebase.tp.ui
 
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,7 +23,8 @@ class HomeViewModel @Inject constructor(
     private val remoteConfig: FirebaseRemoteConfig,
     private val auth: FirebaseAuth,
     private val db : FirebaseFirestore,
-    private val crashlytics: FirebaseCrashlytics
+    private val crashlytics: FirebaseCrashlytics,
+    private val analytics: FirebaseAnalytics
 ): ViewModel(){
 
     val isChatActive = MutableStateFlow<Boolean>(false)
@@ -31,6 +34,15 @@ class HomeViewModel @Inject constructor(
 
     private val _username = MutableStateFlow<String?>(null)
     val username : StateFlow<String?> = _username.asStateFlow()
+
+
+
+    val parameters = Bundle().apply {
+        this.putString("screen_name", "Home")
+    }
+    fun logEvent(){
+        analytics.logEvent("screen_name", parameters)
+    }
 
 
     init {
@@ -45,10 +57,8 @@ class HomeViewModel @Inject constructor(
             throw Exception("Home Test Error")
 
         }catch (e: Exception) {
-            e.printStackTrace()
-            Log.e("Home", "test Exception ON")
-            crashlytics.log("Home Test Error")
-            crashlytics.setCustomKey("Home", "Home Test Error")
+            crashlytics.setCustomKey("Home", "CRASH DE PRUEBA")
+            crashlytics.recordException(e)
         }
     }
 
@@ -74,6 +84,7 @@ class HomeViewModel @Inject constructor(
         }catch (e: Exception){
             e.printStackTrace()
             _username.value = "Usuario"
+            crashlytics.setCustomKey("Home", e.printStackTrace().toString())
         }
     }
 
