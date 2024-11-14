@@ -95,13 +95,13 @@ fun InitialScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        CustomButton(
+        /*CustomButton(
             modifier = Modifier.clickable {},
             image = R.drawable.ic_launcher_foreground,
             text = "Continuar con Google"
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))*/
 
         Text(
             text = "Ya tengo cuenta",
