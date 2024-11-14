@@ -49,19 +49,32 @@ class ChatViewModel @Inject constructor(
 
     fun logEvent() {
         analytics.setDefaultEventParameters(parameters)
+        analytics.logEvent("chat_started", parameters)
     }
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            getPersonality()
-
-            _generativeModel.value = GenerativeModel(
-                modelName = "gemini-1.5-flash",
-                apiKey = BuildConfig.API_KEY,
-                systemInstruction = content {
-                    text(checkPersonality(chatPersonality.value))
+            try {
+                getPersonality()
+                _generativeModel.value = GenerativeModel(
+                    modelName = "gemini-1.5-flash-002",
+                    apiKey = BuildConfig.API_KEY,
+                    systemInstruction = content {
+                        text(checkPersonality(chatPersonality.value).toString())
+                    }
+                )
+            } catch (e: Exception) {
+                _messageList.update {
+                    it + MessageModel(
+                        "Los servidores de Google se encuentran sobrecargados actualmente, porfavor intente más tarde.",
+                        "model"
+                    )
                 }
-            )
+                Log.d("personality", "El modelo no se encuentra disponible.")
+                crashlytics.recordException(e)
+                crashlytics.setCustomKey("Modelo", "El modelo no se encuentra disponible.")
+            }
+
         }
     }
 
@@ -104,6 +117,7 @@ class ChatViewModel @Inject constructor(
 
             _chatPersonality.value = remoteConfig.getString("personalityNumber").toInt()
 
+            Log.d("personality", remoteConfig.getString("personalityNumber"))
             analytics.logEvent("personality_fetched") {
                 param("personality", _chatPersonality.value.toString())
             }
@@ -117,12 +131,21 @@ class ChatViewModel @Inject constructor(
     }
 
     private fun checkPersonality(number: Int): String {
+
+        try {
             return when (number) {
                 1 -> Constants.P1
                 2 -> Constants.P2
                 3 -> Constants.P3
                 else -> Constants.P1
             }
+        } catch (e: Exception) {
+            Log.e("Personality", "Error al verificar la personalidad")
+            crashlytics.recordException(e)
+            crashlytics.setCustomKey("Chat", "Error al verificar la personalidad")
+            return Constants.P1
+        }
+
     }
 
     fun clearMessages() {

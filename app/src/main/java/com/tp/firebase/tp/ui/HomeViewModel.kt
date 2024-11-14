@@ -42,6 +42,7 @@ class HomeViewModel @Inject constructor(
     }
     fun logEvent(){
         analytics.setDefaultEventParameters(parameters)
+        analytics.logEvent("home_started", parameters)
     }
 
 
